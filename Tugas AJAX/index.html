@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas AJAX - Profil Mahasiswa</title>
+    <style>
+        /* Menampilkan data */
+        #hasil-profil{
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            width: fit-content;
+            font-family: Arial, sans-serif;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        button{
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover{
+            background: #45a049;
+        }
+
+        .card{
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 220px;
+            box-shadow: 0 4px 8px rgba(0,0,0.1);
+            text-align: left;
+            transition: transform 0.2s;
+
+        }
+
+        .card:hover{
+            transform: scale(1.05);
+        }
+
+        .nama {
+            font-weight: bold;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        .info{
+            margin-top: 5px;
+            color: #555;
+        }
+
+
+    </style>
+</head>
+<body>
+    
+    <h2>Tampilkan Profil dengan AJAX</h2>
+
+    <!-- Tombol untuk memicu event -->
+     <button type="button" id="btnTampilkan">Tampilkan Profil</button>
+
+     <!-- Untuk menampilkan data -->
+      <div id="hasil-profil">Data belum diambil.</div>
+
+     <script>
+
+        let tampil = false; // status awal data belum tampil
+
+        document.getElementById('btnTampilkan').addEventListener('click', function(){
+
+            const container = document.getElementById('hasil-profil');
+            const button = document.getElementById('btnTampilkan');
+
+            // Jika data sudah tampil makasembunyikan
+            if (tampil) {
+                container.innerHTML = 'Data disembunyikan';
+                button.innerText = 'Tampilkan Profil';
+                tampil = false;
+                return;
+            }
+
+            // Jika belum tampil maka ambil data 
+             fetch('data.php')
+             .then(response => {
+                if (!response.ok){
+                    throw new Error('Gagal ambil data');
+                }
+                return response.json();
+             })
+             .then(data => {
+
+                let output = '';
+
+                data.forEach(item => {
+                    output += `
+                    <div class="card">
+                        <div class="nama">${item.nama}</div>
+                        <div class="info">Pekerjaan: ${item.pekerjaan}</div>
+                        <div class="info">Lokasi: ${item.lokasi}</div>
+                    </div>
+                    `;
+                });
+
+                container.innerHTML = output;
+                button.innerText = 'Sembunyikan Profil';
+                tampil = true;
+             })
+             .catch(error => {
+            console.error(error);
+            container.innerHTML = '❌ Gagal mengambil data';
+
+            
+        });
+         
+        });
+     </script>
+</body>
+</html>
