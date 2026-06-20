@@ -1,6 +1,6 @@
 {
-    "name": "todo_provider_fcm",
-    "short_name": "todo_provider_fcm",
+    "name": "todo_fcm",
+    "short_name": "todo_fcm",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
